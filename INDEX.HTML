@@ -1,0 +1,2466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Event Hub - Registration System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4a6bff;
+            --primary-dark: #3a56d4;
+            --secondary: #ff6b6b;
+            --accent: #4ecdc4;
+            --dark: #2d3436;
+            --light: #f8f9fa;
+            --gray: #636e72;
+            --light-gray: #dfe6e9;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #d63031;
+            --border-radius: 12px;
+            --shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        nav a:hover, nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 107, 255, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Page Container */
+        .page-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            min-height: 70vh;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home Page */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        /* Events Page */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .event-image {
+            height: 200px;
+            width: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .event-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--secondary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .event-content {
+            padding: 1.5rem;
+        }
+
+        .event-category {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: var(--light-gray);
+            color: var(--dark);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .event-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .event-meta {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .event-meta i {
+            color: var(--primary);
+            margin-right: 5px;
+        }
+
+        /* Registration Page */
+        .registration-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Dashboard */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        .dashboard-sidebar {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.8rem 1rem;
+            text-decoration: none;
+            color: var(--dark);
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .dashboard-content {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .registrations-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .registrations-table th,
+        .registrations-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .registrations-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .registrations-table tr:hover {
+            background: #f8f9ff;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+
+        /* About Page */
+        .about-section {
+            background: white;
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .team-member {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        /* Contact Page */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 2rem 0;
+        }
+
+        .contact-info {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: var(--border-radius);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Admin Page */
+        .admin-controls {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .admin-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .admin-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-col h3 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-col a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-col a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--light-gray);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .modal-header {
+            padding: 2rem;
+            background: var(--primary);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-body .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-container {
+                padding: 0 1rem;
+            }
+        }
+
+        /* Image placeholders */
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        /* Event category colors */
+        .category-tech { background: #e3f2fd; color: #1565c0; }
+        .category-cultural { background: #f3e5f5; color: #7b1fa2; }
+        .category-sports { background: #e8f5e9; color: #2e7d32; }
+        .category-workshop { background: #fff3e0; color: #ef6c00; }
+        .category-seminar { background: #fce4ec; color: #c2185b; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo" onclick="switchPage('home')">
+                <i class="fas fa-calendar-alt"></i>
+                Event<span>Hub</span>
+            </a>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" onclick="switchPage('home')">Home</a></li>
+                    <li><a href="#" class="nav-link" onclick="switchPage('events')">Events</a></li>
+                    <li><a href="#" class="nav-link" onclick="switchPage('register')">Register</a></li>
+                    <li><a href="#" class="nav-link" onclick="switchPage('dashboard')">Dashboard</a></li>
+                    <li><a href="#" class="nav-link" onclick="switchPage('about')">About</a></li>
+                    <li><a href="#" class="nav-link" onclick="switchPage('contact')">Contact</a></li>
+                    <li><a href="#" class="nav-link" onclick="switchPage('admin')">Admin</a></li>
+                </ul>
+            </nav>
+            
+            <div class="auth-buttons">
+                <button class="btn btn-outline" onclick="showLoginModal()">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button class="btn btn-primary" onclick="showSignupModal()">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- Page 1: Home -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>Welcome to College Event Hub</h1>
+                <p>Discover, register, and manage all campus events in one place. Connect with your college community!</p>
+                <button class="btn btn-primary" onclick="switchPage('events')" style="margin-top: 1rem;">
+                    <i class="fas fa-calendar-check"></i> Browse Events
+                </button>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <h3>Easy Registration</h3>
+                    <p>Register for events with just a few clicks. No paperwork required.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Smart Reminders</h3>
+                    <p>Get notified about upcoming events and registration deadlines.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Track Participation</h3>
+                    <p>Monitor your event history and participation certificates.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 3rem 0;">
+                <h2>Upcoming Featured Events</h2>
+                <div class="events-grid" id="featuredEvents"></div>
+            </div>
+        </div>
+
+        <!-- Page 2: Events -->
+        <div id="events" class="page">
+            <h1 style="text-align: center; margin-bottom: 2rem;">All Events</h1>
+            
+            <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="filterEvents('all')">All</button>
+                <button class="btn btn-outline" onclick="filterEvents('tech')">Tech</button>
+                <button class="btn btn-outline" onclick="filterEvents('cultural')">Cultural</button>
+                <button class="btn btn-outline" onclick="filterEvents('sports')">Sports</button>
+                <button class="btn btn-outline" onclick="filterEvents('workshop')">Workshop</button>
+                <button class="btn btn-outline" onclick="filterEvents('seminar')">Seminar</button>
+            </div>
+            
+            <div class="events-grid" id="eventsGrid"></div>
+        </div>
+
+        <!-- Page 3: Registration -->
+        <div id="register" class="page">
+            <div class="registration-container">
+                <h2 class="form-title">Event Registration</h2>
+                <form id="registrationForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Student ID</label>
+                            <input type="text" class="form-control" id="studentId" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <select class="form-control" id="department" required>
+                                <option value="">Select Department</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="BAMS">BAMS</option>
+                                <option value="BHMS">BHMS</option>
+                                <option value="Nursing">Nursing</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Year of Study</label>
+                            <select class="form-control" id="year" required>
+                                <option value="">Select Year</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Select Event</label>
+                        <select class="form-control" id="eventSelect" required>
+                            <option value="">Select an event</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Additional Notes (Optional)</label>
+                        <textarea class="form-control" id="notes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to the terms and conditions</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">
+                        <i class="fas fa-paper-plane"></i> Submit Registration
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Page 4: Dashboard -->
+        <div id="dashboard" class="page">
+            <h1 style="text-align: center; margin-bottom: 1rem;">My Dashboard</h1>
+            <p style="text-align: center; color: var(--gray); margin-bottom: 2rem;">Manage your event registrations and participation</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Registrations</h3>
+                    <div class="stat-number" id="totalRegistrations">0</div>
+                    <p>All events registered</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Confirmed</h3>
+                    <div class="stat-number" id="confirmedCount">0</div>
+                    <p>Approved registrations</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending</h3>
+                    <div class="stat-number" id="pendingCount">0</div>
+                    <p>Awaiting approval</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Attended</h3>
+                    <div class="stat-number" id="attendedCount">0</div>
+                    <p>Events participated</p>
+                </div>
+            </div>
+            
+            <div class="dashboard-container">
+                <div class="dashboard-sidebar">
+                    <ul class="sidebar-menu">
+                        <li><a href="#" class="active" onclick="showDashboardTab('registrations')">
+                            <i class="fas fa-list-alt"></i> My Registrations
+                        </a></li>
+                        <li><a href="#" onclick="showDashboardTab('certificates')">
+                            <i class="fas fa-certificate"></i> Certificates
+                        </a></li>
+                        <li><a href="#" onclick="showDashboardTab('profile')">
+                            <i class="fas fa-user"></i> Profile
+                        </a></li>
+                        <li><a href="#" onclick="showDashboardTab('settings')">
+                            <i class="fas fa-cog"></i> Settings
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <div class="dashboard-content">
+                    <div class="dashboard-header">
+                        <h2>My Event Registrations</h2>
+                        <button class="btn btn-outline btn-sm" onclick="exportRegistrations()">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                    </div>
+                    
+                    <div id="dashboardTabContent">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 5: About -->
+        <div id="about" class="page">
+            <div class="about-section">
+                <h1 style="text-align: center; margin-bottom: 2rem;">About College Event Hub</h1>
+                
+                <div style="text-align: center; margin: 2rem 0;">
+                    <div class="image-placeholder" style="height: 300px; border-radius: var(--border-radius); margin-bottom: 2rem;">
+                        <i class="fas fa-university"></i>
+                        <span style="margin-left: 10px;">Campus Life</span>
+                    </div>
+                </div>
+                
+                <h2>Our Mission</h2>
+                <p style="margin: 1rem 0; line-height: 1.8;">College Event Hub is a comprehensive platform designed to streamline event management and participation for students, faculty, and event organizers. Our mission is to enhance campus engagement by making event discovery, registration, and management seamless and efficient.</p>
+                
+                <h2 style="margin-top: 2rem;">Key Features</h2>
+                <ul style="margin: 1rem 0 2rem; padding-left: 1.5rem; line-height: 2;">
+                    <li>Centralized event calendar for all campus activities</li>
+                    <li>One-click registration and payment processing</li>
+                    <li>Automated reminders and notifications</li>
+                    <li>Digital certificates and attendance tracking</li>
+                    <li>Analytics and reporting for event organizers</li>
+                    <li>Mobile-friendly interface for on-the-go access</li>
+                </ul>
+            </div>
+            
+            <h2 style="text-align: center; margin: 3rem 0 2rem;">Our Team</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-avatar">JD</div>
+                    <h3>John Doe</h3>
+                    <p style="color: var(--primary);">Project Lead</p>
+                    <p>Computer Science Department</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">SJ</div>
+                    <h3>Sarah Johnson</h3>
+                    <p style="color: var(--primary);">Developer</p>
+                    <p>Software Engineering Team</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">MP</div>
+                    <h3>Mike Parker</h3>
+                    <p style="color: var(--primary);">Designer</p>
+                    <p>User Experience Team</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 6: Contact -->
+        <div id="contact" class="page">
+            <h1 style="text-align: center; margin-bottom: 2rem;">Contact Us</h1>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h2>Get In Touch</h2>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h3>Address</h3>
+                            <p>Student Activity Center, Main Campus</p>
+                            <p>Shetty Institute of Technology</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h3>Phone</h3>
+                            <p>+1 (555) 123-4567</p>
+                            <p>Mon-Fri, 9:00 AM - 5:00 PM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h3>Email</h3>
+                            <p>events@sit.edu</p>
+                            <p>support@collegeeventhub.edu</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <h3>Follow Us</h3>
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <button class="btn btn-outline">
+                                <i class="fab fa-facebook"></i>
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fab fa-twitter"></i>
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fab fa-instagram"></i>
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fab fa-linkedin"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-info">
+                    <h2>Send Message</h2>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="contactName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="contactEmail" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="contactSubject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control" id="contactMessage" rows="5" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem; text-align: center;">
+                <div class="image-placeholder" style="height: 300px; border-radius: var(--border-radius);">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span style="margin-left: 10px;">Campus Map</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 7: Admin -->
+        <div id="admin" class="page">
+            <h1 style="text-align: center; margin-bottom: 2rem;">Admin Panel</h1>
+            <p style="text-align: center; color: var(--gray); margin-bottom: 2rem;">Manage events, users, and system settings</p>
+            
+            <div class="admin-controls">
+                <h2>Quick Actions</h2>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="showAddEventModal()">
+                        <i class="fas fa-plus"></i> Add New Event
+                    </button>
+                    <button class="btn btn-success" onclick="loadAllRegistrations()">
+                        <i class="fas fa-users"></i> View All Registrations
+                    </button>
+                    <button class="btn btn-warning" onclick="generateReport()">
+                        <i class="fas fa-chart-bar"></i> Generate Report
+                    </button>
+                    <button class="btn btn-danger" onclick="showSystemSettings()">
+                        <i class="fas fa-cogs"></i> System Settings
+                    </button>
+                </div>
+            </div>
+            
+            <div class="admin-grid">
+                <div class="admin-card">
+                    <div class="feature-icon" style="background: var(--success);">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Total Events</h3>
+                    <div class="stat-number" id="adminTotalEvents">0</div>
+                    <p>Active events in system</p>
+                </div>
+                
+                <div class="admin-card">
+                    <div class="feature-icon" style="background: var(--primary);">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3>Total Users</h3>
+                    <div class="stat-number" id="adminTotalUsers">0</div>
+                    <p>Registered users</p>
+                </div>
+                
+                <div class="admin-card">
+                    <div class="feature-icon" style="background: var(--warning);">
+                        <i class="fas fa-file-signature"></i>
+                    </div>
+                    <h3>Total Registrations</h3>
+                    <div class="stat-number" id="adminTotalRegistrations">0</div>
+                    <p>All event registrations</p>
+                </div>
+                
+                <div class="admin-card">
+                    <div class="feature-icon" style="background: var(--danger);">
+                        <i class="fas fa-money-check-alt"></i>
+                    </div>
+                    <h3>Revenue</h3>
+                    <div class="stat-number">$<span id="adminRevenue">0</span></div>
+                    <p>From paid events</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem;">
+                <h2>Recent Activity</h2>
+                <div id="adminActivityLog" style="background: white; padding: 2rem; border-radius: var(--border-radius); margin-top: 1rem;">
+                    <!-- Activity log will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>College Event Hub</h3>
+                <p>Streamlining campus event management and student engagement since 2023.</p>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#" onclick="switchPage('home')">Home</a></li>
+                    <li><a href="#" onclick="switchPage('events')">Events</a></li>
+                    <li><a href="#" onclick="switchPage('register')">Register</a></li>
+                    <li><a href="#" onclick="switchPage('dashboard')">Dashboard</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h3>Departments</h3>
+                <ul>
+                    <li><a href="#">Student Affairs</a></li>
+                    <li><a href="#">Cultural Committee</a></li>
+                    <li><a href="#">Sports Department</a></li>
+                    <li><a href="#">Academic Events</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2023 College Event Hub. All rights reserved. | Developed by SIT Students
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            <div class="modal-header">
+                <h2>Login to Your Account</h2>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label">Email or Student ID</label>
+                        <input type="text" class="form-control" id="loginUsername" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" required>
+                    </div>
+                    
+                    <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <input type="checkbox" id="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" style="color: var(--primary);">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    
+                    <p style="text-align: center; margin-top: 1rem;">
+                        Don't have an account? 
+                        <a href="#" onclick="closeModal('loginModal'); showSignupModal();" style="color: var(--primary);">Sign up</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('signupModal')">&times;</button>
+            <div class="modal-header">
+                <h2>Create New Account</h2>
+            </div>
+            <div class="modal-body">
+                <form id="signupForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="signupFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="signupLastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Student ID</label>
+                        <input type="text" class="form-control" id="signupStudentId" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="signupEmail" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="signupPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="signupConfirmPassword" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Department</label>
+                        <select class="form-control" id="signupDepartment" required>
+                            <option value="">Select Department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="BAMS">BAMS</option>
+                            <option value="BHMS">BHMS</option>
+                            <option value="Nursing">Nursing</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="eventDetailsModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('eventDetailsModal')">&times;</button>
+            <div class="modal-header">
+                <h2 id="modalEventTitle">Event Details</h2>
+            </div>
+            <div class="modal-body" id="eventDetailsContent">
+                <!-- Event details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('successModal')">&times;</button>
+            <div class="modal-body" style="text-align: center; padding: 3rem;">
+                <div style="background: var(--success); color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 1.5rem;">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h2 id="successTitle">Success!</h2>
+                <p id="successMessage">Your action was completed successfully.</p>
+                <button class="btn btn-primary" onclick="closeModal('successModal')" style="margin-top: 1.5rem;">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =================== BACKEND SIMULATION ===================
+        // Using localStorage as a database simulation
+        
+        class EventHubDatabase {
+            constructor() {
+                this.initializeDatabase();
+            }
+            
+            initializeDatabase() {
+                if (!localStorage.getItem('eventHubDB')) {
+                    const defaultData = {
+                        events: this.getDefaultEvents(),
+                        registrations: this.getDefaultRegistrations(),
+                        users: this.getDefaultUsers(),
+                        activities: [],
+                        nextEventId: 7,
+                        nextRegistrationId: 8,
+                        nextUserId: 4,
+                        settings: {
+                            systemName: "College Event Hub",
+                            contactEmail: "events@sit.edu",
+                            maxRegistrations: 1000
+                        }
+                    };
+                    
+                    localStorage.setItem('eventHubDB', JSON.stringify(defaultData));
+                }
+            }
+            
+            getDefaultEvents() {
+                return [
+                    {
+                        id: 1,
+                        title: "Annual Tech Fest 2023",
+                        category: "tech",
+                        date: "2023-10-15",
+                        time: "10:00 AM - 5:00 PM",
+                        location: "Main Auditorium",
+                        description: "Join us for the biggest tech event of the year! Featuring workshops, hackathons, and tech exhibitions.",
+                        image: "tech",
+                        organizer: "Computer Science Department",
+                        capacity: 500,
+                        registered: 245,
+                        fee: 0,
+                        status: "active",
+                        featured: true
+                    },
+                    {
+                        id: 2,
+                        title: "Cultural Night Gala",
+                        category: "cultural",
+                        date: "2023-10-20",
+                        time: "6:00 PM - 11:00 PM",
+                        location: "College Ground",
+                        description: "An evening of music, dance, and cultural performances from around the world.",
+                        image: "cultural",
+                        organizer: "Cultural Committee",
+                        capacity: 300,
+                        registered: 189,
+                        fee: 100,
+                        status: "active",
+                        featured: true
+                    },
+                    {
+                        id: 3,
+                        title: "Prompt Engineering Workshop",
+                        category: "workshop",
+                        date: "2023-10-25",
+                        time: "2:00 PM - 5:00 PM",
+                        location: "Seminar Hall",
+                        description: "Learn how to effectively communicate with AI models and get the best results.",
+                        image: "workshop",
+                        organizer: "AI Research Center",
+                        capacity: 50,
+                        registered: 32,
+                        fee: 0,
+                        status: "active",
+                        featured: true
+                    },
+                    {
+                        id: 4,
+                        title: "Inter-College Sports Tournament",
+                        category: "sports",
+                        date: "2023-11-05",
+                        time: "9:00 AM - 6:00 PM",
+                        location: "Sports Complex",
+                        description: "Annual sports competition featuring various colleges in multiple sports.",
+                        image: "sports",
+                        organizer: "Sports Department",
+                        capacity: 200,
+                        registered: 156,
+                        fee: 50,
+                        status: "active",
+                        featured: false
+                    },
+                    {
+                        id: 5,
+                        title: "AI & Machine Learning Seminar",
+                        category: "seminar",
+                        date: "2023-11-12",
+                        time: "11:00 AM - 1:00 PM",
+                        location: "Tech Hall",
+                        description: "Expert talk on the latest advancements in AI and machine learning.",
+                        image: "seminar",
+                        organizer: "Computer Science Department",
+                        capacity: 150,
+                        registered: 98,
+                        fee: 0,
+                        status: "active",
+                        featured: false
+                    },
+                    {
+                        id: 6,
+                        title: "Cybersecurity Workshop",
+                        category: "workshop",
+                        date: "2023-11-18",
+                        time: "3:00 PM - 6:00 PM",
+                        location: "Computer Lab 3",
+                        description: "Hands-on workshop on cybersecurity fundamentals and ethical hacking.",
+                        image: "workshop",
+                        organizer: "IT Security Club",
+                        capacity: 40,
+                        registered: 28,
+                        fee: 200,
+                        status: "active",
+                        featured: false
+                    }
+                ];
+            }
+            
+            getDefaultRegistrations() {
+                return [
+                    {
+                        id: 1,
+                        eventId: 1,
+                        eventName: "Annual Tech Fest 2023",
+                        studentId: "SIT2023001",
+                        studentName: "John Doe",
+                        email: "john@student.sit.edu",
+                        department: "Computer Science",
+                        year: "3rd Year",
+                        phone: "9876543210",
+                        registrationDate: "2023-10-01",
+                        status: "confirmed",
+                        attendance: false,
+                        certificate: false
+                    },
+                    {
+                        id: 2,
+                        eventId: 2,
+                        eventName: "Cultural Night Gala",
+                        studentId: "SIT2023001",
+                        studentName: "John Doe",
+                        email: "john@student.sit.edu",
+                        department: "Computer Science",
+                        year: "3rd Year",
+                        phone: "9876543210",
+                        registrationDate: "2023-10-05",
+                        status: "confirmed",
+                        attendance: true,
+                        certificate: true
+                    },
+                    {
+                        id: 3,
+                        eventId: 3,
+                        eventName: "Prompt Engineering Workshop",
+                        studentId: "SIT2023001",
+                        studentName: "John Doe",
+                        email: "john@student.sit.edu",
+                        department: "Computer Science",
+                        year: "3rd Year",
+                        phone: "9876543210",
+                        registrationDate: "2023-10-10",
+                        status: "pending",
+                        attendance: false,
+                        certificate: false
+                    },
+                    {
+                        id: 4,
+                        eventId: 4,
+                        eventName: "Inter-College Sports Tournament",
+                        studentId: "SIT2023002",
+                        studentName: "Jane Smith",
+                        email: "jane@student.sit.edu",
+                        department: "Engineering",
+                        year: "2nd Year",
+                        phone: "9876543211",
+                        registrationDate: "2023-10-08",
+                        status: "confirmed",
+                        attendance: false,
+                        certificate: false
+                    },
+                    {
+                        id: 5,
+                        eventId: 5,
+                        eventName: "AI & Machine Learning Seminar",
+                        studentId: "SIT2023003",
+                        studentName: "Bob Johnson",
+                        email: "bob@student.sit.edu",
+                        department: "BAMS",
+                        year: "4th Year",
+                        phone: "9876543212",
+                        registrationDate: "2023-10-12",
+                        status: "confirmed",
+                        attendance: true,
+                        certificate: true
+                    },
+                    {
+                        id: 6,
+                        eventId: 6,
+                        eventName: "Cybersecurity Workshop",
+                        studentId: "SIT2023004",
+                        studentName: "Alice Brown",
+                        email: "alice@student.sit.edu",
+                        department: "Nursing",
+                        year: "1st Year",
+                        phone: "9876543213",
+                        registrationDate: "2023-10-14",
+                        status: "cancelled",
+                        attendance: false,
+                        certificate: false
+                    },
+                    {
+                        id: 7,
+                        eventId: 1,
+                        eventName: "Annual Tech Fest 2023",
+                        studentId: "SIT2023005",
+                        studentName: "Charlie Wilson",
+                        email: "charlie@student.sit.edu",
+                        department: "BHMS",
+                        year: "2nd Year",
+                        phone: "9876543214",
+                        registrationDate: "2023-10-03",
+                        status: "confirmed",
+                        attendance: false,
+                        certificate: false
+                    }
+                ];
+            }
+            
+            getDefaultUsers() {
+                return [
+                    {
+                        id: 1,
+                        studentId: "SIT2023001",
+                        name: "John Doe",
+                        email: "john@student.sit.edu",
+                        department: "Computer Science",
+                        year: "3rd Year",
+                        phone: "9876543210",
+                        role: "student",
+                        password: "password123",
+                        joined: "2023-09-01"
+                    },
+                    {
+                        id: 2,
+                        studentId: "SIT2023002",
+                        name: "Jane Smith",
+                        email: "jane@student.sit.edu",
+                        department: "Engineering",
+                        year: "2nd Year",
+                        phone: "9876543211",
+                        role: "student",
+                        password: "password123",
+                        joined: "2023-09-01"
+                    },
+                    {
+                        id: 3,
+                        studentId: "ADMIN001",
+                        name: "Admin User",
+                        email: "admin@sit.edu",
+                        department: "Administration",
+                        year: "N/A",
+                        phone: "9876500000",
+                        role: "admin",
+                        password: "admin123",
+                        joined: "2023-01-01"
+                    }
+                ];
+            }
+            
+            getDatabase() {
+                return JSON.parse(localStorage.getItem('eventHubDB') || '{}');
+            }
+            
+            saveDatabase(db) {
+                localStorage.setItem('eventHubDB', JSON.stringify(db));
+            }
+            
+            // Event operations
+            getAllEvents() {
+                return this.getDatabase().events || [];
+            }
+            
+            getEventById(id) {
+                const events = this.getAllEvents();
+                return events.find(event => event.id == id);
+            }
+            
+            addEvent(eventData) {
+                const db = this.getDatabase();
+                eventData.id = db.nextEventId++;
+                db.events.push(eventData);
+                this.saveDatabase(db);
+                return eventData;
+            }
+            
+            updateEvent(id, eventData) {
+                const db = this.getDatabase();
+                const index = db.events.findIndex(e => e.id == id);
+                if (index !== -1) {
+                    db.events[index] = { ...db.events[index], ...eventData };
+                    this.saveDatabase(db);
+                    return db.events[index];
+                }
+                return null;
+            }
+            
+            deleteEvent(id) {
+                const db = this.getDatabase();
+                db.events = db.events.filter(e => e.id != id);
+                this.saveDatabase(db);
+            }
+            
+            // Registration operations
+            getAllRegistrations() {
+                return this.getDatabase().registrations || [];
+            }
+            
+            getRegistrationsByStudentId(studentId) {
+                const registrations = this.getAllRegistrations();
+                return registrations.filter(r => r.studentId === studentId);
+            }
+            
+            addRegistration(registrationData) {
+                const db = this.getDatabase();
+                registrationData.id = db.nextRegistrationId++;
+                registrationData.registrationDate = new Date().toISOString().split('T')[0];
+                registrationData.status = "pending";
+                db.registrations.push(registrationData);
+                
+                // Update event registration count
+                const eventIndex = db.events.findIndex(e => e.id == registrationData.eventId);
+                if (eventIndex !== -1) {
+                    db.events[eventIndex].registered++;
+                }
+                
+                this.saveDatabase(db);
+                
+                // Log activity
+                this.logActivity({
+                    type: 'registration',
+                    description: `New registration for ${registrationData.eventName}`,
+                    studentId: registrationData.studentId,
+                    timestamp: new Date().toISOString()
+                });
+                
+                return registrationData;
+            }
+            
+            updateRegistrationStatus(id, status) {
+                const db = this.getDatabase();
+                const index = db.registrations.findIndex(r => r.id == id);
+                if (index !== -1) {
+                    db.registrations[index].status = status;
+                    this.saveDatabase(db);
+                    return db.registrations[index];
+                }
+                return null;
+            }
+            
+            // User operations
+            getAllUsers() {
+                return this.getDatabase().users || [];
+            }
+            
+            getUserByCredentials(username, password) {
+                const users = this.getAllUsers();
+                return users.find(u => 
+                    (u.email === username || u.studentId === username) && 
+                    u.password === password
+                );
+            }
+            
+            addUser(userData) {
+                const db = this.getDatabase();
+                userData.id = db.nextUserId++;
+                userData.role = "student";
+                userData.joined = new Date().toISOString().split('T')[0];
+                db.users.push(userData);
+                this.saveDatabase(db);
+                return userData;
+            }
+            
+            // Activity logging
+            logActivity(activity) {
+                const db = this.getDatabase();
+                if (!db.activities) db.activities = [];
+                db.activities.unshift(activity);
+                if (db.activities.length > 50) db.activities.pop();
+                this.saveDatabase(db);
+            }
+            
+            getRecentActivities(limit = 10) {
+                const db = this.getDatabase();
+                return (db.activities || []).slice(0, limit);
+            }
+            
+            // Statistics
+            getStats() {
+                const db = this.getDatabase();
+                const events = db.events || [];
+                const registrations = db.registrations || [];
+                const users = db.users || [];
+                
+                return {
+                    totalEvents: events.length,
+                    activeEvents: events.filter(e => e.status === 'active').length,
+                    totalRegistrations: registrations.length,
+                    confirmedRegistrations: registrations.filter(r => r.status === 'confirmed').length,
+                    pendingRegistrations: registrations.filter(r => r.status === 'pending').length,
+                    totalUsers: users.length,
+                    totalRevenue: events.reduce((sum, e) => sum + (e.fee * e.registered), 0)
+                };
+            }
+        }
+
+        // =================== FRONTEND APPLICATION ===================
+        const db = new EventHubDatabase();
+        let currentUser = null;
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("College Event Hub initialized");
+            initializeApp();
+            setupEventListeners();
+        });
+
+        function initializeApp() {
+            // Load events on home page
+            loadFeaturedEvents();
+            
+            // Load all events on events page
+            loadAllEvents();
+            
+            // Load event options in registration form
+            loadEventOptions();
+            
+            // Update admin stats
+            updateAdminStats();
+            
+            // Update user dashboard stats if user is logged in
+            updateDashboardStats();
+        }
+
+        function setupEventListeners() {
+            // Navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.textContent.toLowerCase();
+                    if (page === 'home') switchPage('home');
+                    else if (page === 'events') switchPage('events');
+                    else if (page === 'register') switchPage('register');
+                    else if (page === 'dashboard') switchPage('dashboard');
+                    else if (page === 'about') switchPage('about');
+                    else if (page === 'contact') switchPage('contact');
+                    else if (page === 'admin') switchPage('admin');
+                });
+            });
+
+            // Registration form
+            document.getElementById('registrationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleRegistration();
+            });
+
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleLogin();
+            });
+
+            // Signup form
+            document.getElementById('signupForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleSignup();
+            });
+
+            // Contact form
+            document.getElementById('contactForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleContact();
+            });
+        }
+
+        function switchPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`.nav-link[onclick*="${pageId}"]`).classList.add('active');
+            
+            // Page-specific initialization
+            if (pageId === 'dashboard') {
+                showDashboardTab('registrations');
+            } else if (pageId === 'admin') {
+                updateAdminStats();
+                loadAdminActivityLog();
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function loadFeaturedEvents() {
+            const events = db.getAllEvents().filter(e => e.featured);
+            const container = document.getElementById('featuredEvents');
+            container.innerHTML = '';
+            
+            events.forEach(event => {
+                const eventCard = createEventCard(event);
+                container.appendChild(eventCard);
+            });
+        }
+
+        function loadAllEvents() {
+            const events = db.getAllEvents();
+            const container = document.getElementById('eventsGrid');
+            container.innerHTML = '';
+            
+            events.forEach(event => {
+                const eventCard = createEventCard(event);
+                container.appendChild(eventCard);
+            });
+        }
+
+        function createEventCard(event) {
+            const card = document.createElement('div');
+            card.className = 'event-card';
+            card.onclick = () => showEventDetails(event.id);
+            
+            const categoryClass = `category-${event.category}`;
+            const imageMap = {
+                tech: 'fas fa-laptop-code',
+                cultural: 'fas fa-music',
+                sports: 'fas fa-running',
+                workshop: 'fas fa-chalkboard-teacher',
+                seminar: 'fas fa-chart-line'
+            };
+            
+            const icon = imageMap[event.category] || 'fas fa-calendar';
+            
+            card.innerHTML = `
+                <div class="event-image">
+                    <i class="${icon}"></i>
+                    <div class="event-badge">${event.fee === 0 ? 'FREE' : `₹${event.fee}`}</div>
+                </div>
+                <div class="event-content">
+                    <span class="event-category ${categoryClass}">${event.category.toUpperCase()}</span>
+                    <h3 class="event-title">${event.title}</h3>
+                    <div class="event-meta">
+                        <div><i class="far fa-calendar"></i> ${formatDate(event.date)}</div>
+                        <div><i class="far fa-clock"></i> ${event.time}</div>
+                    </div>
+                    <div class="event-meta">
+                        <div><i class="fas fa-map-marker-alt"></i> ${event.location}</div>
+                        <div><i class="fas fa-users"></i> ${event.registered}/${event.capacity}</div>
+                    </div>
+                    <p style="margin: 1rem 0; color: var(--gray); font-size: 0.9rem;">
+                        ${event.description.substring(0, 100)}...
+                    </p>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        <i class="fas fa-info-circle"></i> View Details
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function showEventDetails(eventId) {
+            const event = db.getEventById(eventId);
+            if (!event) return;
+            
+            document.getElementById('modalEventTitle').textContent = event.title;
+            
+            const content = document.getElementById('eventDetailsContent');
+            content.innerHTML = `
+                <div style="margin-bottom: 1.5rem;">
+                    <span class="event-category category-${event.category}">${event.category.toUpperCase()}</span>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <h4><i class="far fa-calendar"></i> Date & Time</h4>
+                        <p>${formatDate(event.date)} at ${event.time}</p>
+                    </div>
+                    <div>
+                        <h4><i class="fas fa-map-marker-alt"></i> Location</h4>
+                        <p>${event.location}</p>
+                    </div>
+                    <div>
+                        <h4><i class="fas fa-user-tie"></i> Organizer</h4>
+                        <p>${event.organizer}</p>
+                    </div>
+                    <div>
+                        <h4><i class="fas fa-users"></i> Availability</h4>
+                        <p>${event.registered} / ${event.capacity} registered</p>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h4>Description</h4>
+                    <p>${event.description}</p>
+                </div>
+                
+                <div style="background: var(--light); padding: 1rem; border-radius: var(--border-radius); margin-bottom: 1.5rem;">
+                    <h4>Registration Fee</h4>
+                    <p style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">
+                        ${event.fee === 0 ? 'FREE ENTRY' : `₹${event.fee}`}
+                    </p>
+                </div>
+                
+                <button class="btn btn-primary" onclick="registerForEvent(${event.id})" style="width: 100%;">
+                    <i class="fas fa-paper-plane"></i> Register Now
+                </button>
+            `;
+            
+            showModal('eventDetailsModal');
+        }
+
+        function registerForEvent(eventId) {
+            if (!currentUser) {
+                showModal('loginModal');
+                return;
+            }
+            
+            const event = db.getEventById(eventId);
+            switchPage('register');
+            
+            // Pre-fill form with event and user info
+            document.getElementById('eventSelect').value = eventId;
+            document.getElementById('firstName').value = currentUser.name.split(' ')[0] || '';
+            document.getElementById('lastName').value = currentUser.name.split(' ').slice(1).join(' ') || '';
+            document.getElementById('email').value = currentUser.email;
+            document.getElementById('studentId').value = currentUser.studentId;
+            document.getElementById('department').value = currentUser.department;
+            
+            closeModal('eventDetailsModal');
+        }
+
+        function loadEventOptions() {
+            const select = document.getElementById('eventSelect');
+            const events = db.getAllEvents();
+            
+            events.forEach(event => {
+                const option = document.createElement('option');
+                option.value = event.id;
+                option.textContent = `${event.title} (${formatDate(event.date)})`;
+                select.appendChild(option);
+            });
+        }
+
+        function handleRegistration() {
+            const eventId = document.getElementById('eventSelect').value;
+            const event = db.getEventById(eventId);
+            
+            if (!event) {
+                showSuccess('Error', 'Please select a valid event.');
+                return;
+            }
+            
+            const registrationData = {
+                eventId: parseInt(eventId),
+                eventName: event.title,
+                studentId: document.getElementById('studentId').value,
+                studentName: `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`,
+                email: document.getElementById('email').value,
+                department: document.getElementById('department').value,
+                year: document.getElementById('year').value,
+                phone: document.getElementById('phone').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            const newRegistration = db.addRegistration(registrationData);
+            
+            showSuccess(
+                'Registration Submitted!',
+                `You have successfully registered for ${event.title}. Your registration ID is REG${newRegistration.id.toString().padStart(4, '0')}.`
+            );
+            
+            // Clear form
+            document.getElementById('registrationForm').reset();
+            
+            // Update dashboard stats
+            updateDashboardStats();
+        }
+
+        function handleLogin() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const user = db.getUserByCredentials(username, password);
+            
+            if (user) {
+                currentUser = user;
+                showSuccess('Login Successful', `Welcome back, ${user.name}!`);
+                closeModal('loginModal');
+                updateDashboardStats();
+                
+                if (user.role === 'admin') {
+                    document.querySelector('.nav-link[onclick*="admin"]').style.display = 'block';
+                }
+            } else {
+                showSuccess('Login Failed', 'Invalid username or password.');
+            }
+        }
+
+        function handleSignup() {
+            const userData = {
+                studentId: document.getElementById('signupStudentId').value,
+                name: `${document.getElementById('signupFirstName').value} ${document.getElementById('signupLastName').value}`,
+                email: document.getElementById('signupEmail').value,
+                password: document.getElementById('signupPassword').value,
+                department: document.getElementById('signupDepartment').value,
+                phone: 'Not provided'
+            };
+            
+            const newUser = db.addUser(userData);
+            currentUser = newUser;
+            
+            showSuccess(
+                'Account Created!',
+                `Welcome to College Event Hub, ${newUser.name}! Your account has been created successfully.`
+            );
+            
+            closeModal('signupModal');
+            updateDashboardStats();
+        }
+
+        function handleContact() {
+            showSuccess(
+                'Message Sent!',
+                'Thank you for contacting us. We will get back to you within 24 hours.'
+            );
+            
+            document.getElementById('contactForm').reset();
+        }
+
+        function showDashboardTab(tab) {
+            const content = document.getElementById('dashboardTabContent');
+            
+            if (tab === 'registrations') {
+                const registrations = currentUser ? 
+                    db.getRegistrationsByStudentId(currentUser.studentId) : 
+                    [];
+                
+                if (registrations.length === 0) {
+                    content.innerHTML = `
+                        <div style="text-align: center; padding: 3rem;">
+                            <i class="fas fa-calendar-times" style="font-size: 3rem; color: var(--gray); margin-bottom: 1rem;"></i>
+                            <h3>No Registrations Yet</h3>
+                            <p>You haven't registered for any events yet.</p>
+                            <button class="btn btn-primary" onclick="switchPage('events')" style="margin-top: 1rem;">
+                                Browse Events
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    let html = `
+                        <table class="registrations-table">
+                            <thead>
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    
+                    registrations.forEach(reg => {
+                        const event = db.getEventById(reg.eventId);
+                        const statusClass = `status-${reg.status}`;
+                        
+                        html += `
+                            <tr>
+                                <td><strong>${reg.eventName}</strong></td>
+                                <td>${formatDate(reg.registrationDate)}</td>
+                                <td><span class="status-badge ${statusClass}">${reg.status.toUpperCase()}</span></td>
+                                <td>
+                                    <button class="btn btn-outline btn-sm" onclick="viewRegistrationDetails(${reg.id})">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    html += `
+                            </tbody>
+                        </table>
+                    `;
+                    
+                    content.innerHTML = html;
+                }
+            } else if (tab === 'certificates') {
+                content.innerHTML = `
+                    <div style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-certificate" style="font-size: 3rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                        <h3>Certificates</h3>
+                        <p>Your participation certificates will appear here after attending events.</p>
+                    </div>
+                `;
+            } else if (tab === 'profile') {
+                if (!currentUser) {
+                    content.innerHTML = `
+                        <div style="text-align: center; padding: 3rem;">
+                            <p>Please login to view your profile.</p>
+                            <button class="btn btn-primary" onclick="showLoginModal()">
+                                Login
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    content.innerHTML = `
+                        <div style="max-width: 500px; margin: 0 auto;">
+                            <div style="text-align: center; margin-bottom: 2rem;">
+                                <div style="background: var(--primary); color: white; width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 1rem;">
+                                    ${currentUser.name.charAt(0)}
+                                </div>
+                                <h3>${currentUser.name}</h3>
+                                <p style="color: var(--gray);">${currentUser.studentId}</p>
+                            </div>
+                            
+                            <div style="background: var(--light); padding: 1.5rem; border-radius: var(--border-radius);">
+                                <div style="margin-bottom: 1rem;">
+                                    <strong>Email:</strong> ${currentUser.email}
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <strong>Department:</strong> ${currentUser.department}
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <strong>Year:</strong> ${currentUser.year}
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <strong>Phone:</strong> ${currentUser.phone}
+                                </div>
+                                <div>
+                                    <strong>Member Since:</strong> ${formatDate(currentUser.joined)}
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary" style="margin-top: 1.5rem; width: 100%;">
+                                <i class="fas fa-edit"></i> Edit Profile
+                            </button>
+                        </div>
+                    `;
+                }
+            } else if (tab === 'settings') {
+                content.innerHTML = `
+                    <div style="max-width: 500px; margin: 0 auto;">
+                        <h3 style="margin-bottom: 1.5rem;">Settings</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Email Notifications</label>
+                            <div>
+                                <input type="checkbox" id="emailNotifications" checked>
+                                <label for="emailNotifications">Receive email notifications</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">SMS Notifications</label>
+                            <div>
+                                <input type="checkbox" id="smsNotifications">
+                                <label for="smsNotifications">Receive SMS notifications</label>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="margin-top: 1rem;">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function viewRegistrationDetails(registrationId) {
+            const registrations = db.getAllRegistrations();
+            const registration = registrations.find(r => r.id == registrationId);
+            
+            if (!registration) return;
+            
+            const event = db.getEventById(registration.eventId);
+            
+            showSuccess(
+                'Registration Details',
+                `
+                <div style="text-align: left;">
+                    <p><strong>Registration ID:</strong> REG${registration.id.toString().padStart(4, '0')}</p>
+                    <p><strong>Event:</strong> ${registration.eventName}</p>
+                    <p><strong>Date Registered:</strong> ${formatDate(registration.registrationDate)}</p>
+                    <p><strong>Status:</strong> <span class="status-badge status-${registration.status}">${registration.status.toUpperCase()}</span></p>
+                    <p><strong>Student Name:</strong> ${registration.studentName}</p>
+                    <p><strong>Student ID:</strong> ${registration.studentId}</p>
+                    <p><strong>Department:</strong> ${registration.department}</p>
+                    ${registration.attendance ? '<p><strong>Attendance:</strong> ✅ Present</p>' : ''}
+                    ${registration.certificate ? '<p><strong>Certificate:</strong> ✅ Available</p>' : ''}
+                </div>
+                `
+            );
+        }
+
+        function updateDashboardStats() {
+            const registrations = currentUser ? 
+                db.getRegistrationsByStudentId(currentUser.studentId) : 
+                [];
+            
+            document.getElementById('totalRegistrations').textContent = registrations.length;
+            document.getElementById('confirmedCount').textContent = 
+                registrations.filter(r => r.status === 'confirmed').length;
+            document.getElementById('pendingCount').textContent = 
+                registrations.filter(r => r.status === 'pending').length;
+            document.getElementById('attendedCount').textContent = 
+                registrations.filter(r => r.attendance).length;
+        }
+
+        function updateAdminStats() {
+            const stats = db.getStats();
+            
+            document.getElementById('adminTotalEvents').textContent = stats.totalEvents;
+            document.getElementById('adminTotalUsers').textContent = stats.totalUsers;
+            document.getElementById('adminTotalRegistrations').textContent = stats.totalRegistrations;
+            document.getElementById('adminRevenue').textContent = stats.totalRevenue;
+        }
+
+        function loadAdminActivityLog() {
+            const activities = db.getRecentActivities();
+            const container = document.getElementById('adminActivityLog');
+            
+            if (activities.length === 0) {
+                container.innerHTML = '<p>No recent activity</p>';
+                return;
+            }
+            
+            let html = '';
+            activities.forEach(activity => {
+                const time = new Date(activity.timestamp).toLocaleTimeString();
+                html += `
+                    <div style="padding: 0.5rem 0; border-bottom: 1px solid var(--light-gray);">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>${activity.description}</span>
+                            <span style="color: var(--gray); font-size: 0.9rem;">${time}</span>
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--gray);">
+                            Student ID: ${activity.studentId || 'System'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function filterEvents(category) {
+            const events = db.getAllEvents();
+            const container = document.getElementById('eventsGrid');
+            container.innerHTML = '';
+            
+            const filteredEvents = category === 'all' ? 
+                events : 
+                events.filter(e => e.category === category);
+            
+            filteredEvents.forEach(event => {
+                const eventCard = createEventCard(event);
+                container.appendChild(eventCard);
+            });
+        }
+
+        function showLoginModal() {
+            showModal('loginModal');
+        }
+
+        function showSignupModal() {
+            showModal('signupModal');
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function showSuccess(title, message) {
+            document.getElementById('successTitle').textContent = title;
+            document.getElementById('successMessage').innerHTML = message;
+            showModal('successModal');
+        }
+
+        function exportRegistrations() {
+            if (!currentUser) {
+                showLoginModal();
+                return;
+            }
+            
+            showSuccess(
+                'Export Started',
+                'Your registration data is being prepared for download. It will be available shortly.'
+            );
+        }
+
+        function loadAllRegistrations() {
+            showSuccess(
+                'All Registrations',
+                'This feature would display all registrations in the system (admin only).'
+            );
+        }
+
+        function generateReport() {
+            showSuccess(
+                'Report Generated',
+                'The system report has been generated and is available for download.'
+            );
+        }
+
+        function showSystemSettings() {
+            showSuccess(
+                'System Settings',
+                'System configuration options would appear here (admin only).'
+            );
+        }
+
+        function showAddEventModal() {
+            showSuccess(
+                'Add New Event',
+                'Event creation form would appear here (admin only).'
+            );
+        }
+
+        // Utility functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Make functions available globally
+        window.switchPage = switchPage;
+        window.showEventDetails = showEventDetails;
+        window.showLoginModal = showLoginModal;
+        window.showSignupModal = showSignupModal;
+        window.closeModal = closeModal;
+        window.filterEvents = filterEvents;
+        window.showDashboardTab = showDashboardTab;
+        window.exportRegistrations = exportRegistrations;
+        window.registerForEvent = registerForEvent;
+        window.viewRegistrationDetails = viewRegistrationDetails;
+        window.loadAllRegistrations = loadAllRegistrations;
+        window.generateReport = generateReport;
+        window.showSystemSettings = showSystemSettings;
+        window.showAddEventModal = showAddEventModal;
+    </script>
+</body>
+</html>
